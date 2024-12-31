@@ -49,11 +49,14 @@ namespace AntiAccessoryGlitch
 
         private void OnTimerElapsed(object? sender, ElapsedEventArgs e)
         {
-            foreach (TSPlayer player in TShock.Players) if (player != null && player.Active && !player.Dead)
+            foreach (TSPlayer player in TShock.Players)
+            {
+                if (player != null && player.Active && !player.Dead)
                 {
-                    if (player.Group.permissions.Contains("tshock.admin.nokick")) return;
-                    CheckPlayerInventory(player);
+                    if (player.Group.permissions.Contains("tshock.admin.nokick") || player.Group.permissions.Contains("*")) continue;
+                    else CheckPlayerInventory(player);
                 }
+            }
         }
 
         void CheckPlayerInventory(TSPlayer player)
@@ -81,7 +84,7 @@ namespace AntiAccessoryGlitch
                             };
                             player.SetBuff(type: 47, time: 20 * 60);
                             PlayersToHandle[player.Name] = DateTime.Now;
-                            TShock.Utils.Broadcast($"{player.Name} has more than one '{player.TPlayer.armor[i].Name}' equipped.", Color.AliceBlue);
+                            TShock.Utils.Broadcast($"{player.Name} has more than one '{player.TPlayer.armor[i].Name}' equipped.", Color.OrangeRed);
                             player.SendInfoMessage($"You have more than one '{player.TPlayer.armor[i].Name}' from your equipment.\nRemove them or you will be kicked from the server.");
                             return;
                         }
