@@ -11,7 +11,7 @@ namespace AntiAccessoryGlitch
     {
         public override string Name => "AntiAccessoryGlitch";
         public override Version Version => new(1, 1, 2);
-        public override string Author => "TRANQUILZOIIP";
+        public override string Author => "TRANQUILZOIIP - github.com/bbeeeeenn";
         public override string Description =>
             "AntiAccessoryGlitch is a TShock plugin designed to stop players from abusing the accessory duplication glitch. It effectively detects and prevents players from equipping the same accessory across all accessory slots, ensuring balanced and fair gameplay on your Terraria server. Lightweight, reliable, and easy to use—keep your server glitch-free with AntiAccessoryGlitch!";
         private System.Timers.Timer? CheckInventoriesTimer;
