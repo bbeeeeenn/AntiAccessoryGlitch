@@ -32,30 +32,35 @@ namespace AntiAccessoryGlitch
         {
             foreach (TSPlayer player in TShock.Players)
             {
-                if (player != null && player.Active && !player.Dead)
-                {
-                    if (
-                        player.Group.permissions.Contains("tshock.admin.nokick")
-                        || player.Group.permissions.Contains("*")
-                    )
-                        continue;
-                    else
-                        CheckPlayerInventory(player);
-                }
+                if (player == null || !player.Active || player.Dead)
+                    return;
+
+                if (
+                    player.Group.permissions.Contains("tshock.admin.nokick")
+                    || player.Group.permissions.Contains("*")
+                )
+                    continue;
+                else
+                    CheckPlayerAccessory(player);
             }
         }
 
-        void CheckPlayerInventory(TSPlayer player)
+        void CheckPlayerAccessory(TSPlayer player)
         {
             try
             {
-                for (int i = 3; i < 9; i++)
+                for (int i = 0; i < player.Accessories.Count(); i++)
                 {
-                    if (player.TPlayer.armor[i].Name == "")
+                    string item1 = player.Accessories.ToArray()[i].Name;
+
+                    // Skip if blank slot
+                    if (item1 == "")
                         continue;
-                    for (int j = i + 1; j < 10; j++)
+
+                    for (int j = i + 1; j < player.Accessories.Count(); j++)
                     {
-                        if (player.TPlayer.armor[i].Name == player.TPlayer.armor[j].Name)
+                        string item2 = player.Accessories.ToArray()[j].Name;
+                        if (item1 == item2)
                         {
                             if (PlayersToHandle.ContainsKey(player.Name))
                             {
@@ -70,7 +75,7 @@ namespace AntiAccessoryGlitch
                                     player.SendInfoMessage($"Time left: {TimeLeft}");
                                 return;
                             }
-                            ;
+
                             player.SetBuff(type: 47, time: 20 * 60);
                             PlayersToHandle[player.Name] = DateTime.Now;
                             TShock.Utils.Broadcast(
@@ -92,7 +97,7 @@ namespace AntiAccessoryGlitch
             }
             catch (Exception ex)
             {
-                TShock.Log.Error(
+                TShock.Log.ConsoleError(
                     $"AntiAccessoryGlitch: Error checking inventory for player {player.Name}: {ex.Message}"
                 );
             }
